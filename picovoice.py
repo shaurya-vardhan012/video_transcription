@@ -12,7 +12,6 @@ def show():
       dfi['start']=dfi.iloc[:,1]
       dfi['end']=dfi.iloc[:,2]
       dfi['confidence']=dfi.iloc[:,3]  
-      dfi['startend']=dfi.iloc[:,4]  
       final=VideoFileClip('./lec.mp4').subclip(16)
 
       texts = dfi.word
@@ -49,7 +48,7 @@ def audio_to_text():
       transcript, words=leopard.process_file("C:\\Users\\Shaurya Vardhan\\Desktop\\Project\\MinorProject\\new1.wav")
       with open("transcript.csv",'w',newline="") as f:
         writer=csv.writer(f)
-        writer.writerow(["word","start","end","confidence","startend"])
+        writer.writerow(["word","start","end","confidence"])
         for word in words:
               writer.writerow([word.word,word.start_sec,word.end_sec,word.confidence,word.start_sec+word.end_sec])
               # sec=sec+(word.end_sec-word.start_sec)
