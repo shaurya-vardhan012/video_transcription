@@ -76,4 +76,4 @@ def audio_to_text():
       leopard.delete();
 
 
-show()
+# show()
