@@ -1,6 +1,6 @@
 import pvleopard
 import csv
-import cv2
+#import cv2
 import pandas as pd
 from moviepy.editor import *
 from moviepy.video.tools.subtitles import SubtitlesClip
@@ -11,10 +11,11 @@ def show():
       dfi['word']=dfi.iloc[:,0]
       dfi['start']=dfi.iloc[:,1]
       dfi['end']=dfi.iloc[:,2]
-      dfi['confidence']=dfi.iloc[:,3]  
-      final=VideoFileClip('./lec.mp4').subclip(16)
+      dfi['confidence']=dfi.iloc[:,3]
+      dfi['start']=dfi['start'].round(decimals=2)
+      dfi['end']=dfi['end'].round(decimals=2) 
 
-      texts = dfi.word
+      # texts = dfi.word
       # length=len(texts)
       # t=0
       # txt_clips = []
@@ -29,18 +30,20 @@ def show():
       # final.write_videofile("TEXT.mp4")
       
 
-      generator = lambda txt: TextClip(txt, font='Arial', fontsize=24, color='white')
-      subs = [((0, 4), 'subs1'),
-            ((4, 9), 'subs2'),
-            ((9, 12), 'subs3'),
-            ((12, 16), 'subs4')]
-
+      generator = lambda txt: TextClip(txt, font='Arial', fontsize=24, color='black',bg_color='white')
+      #subs = [((0, 4), 'subs1'),((4, 9), 'subs2'),((9, 12), 'subs3'),((12, 16), 'subs4')]
+      subs = []
+      # print(dfi)
+      for i in range(0,len(dfi.index)):
+                  k=((dfi.iloc[i,1],dfi.iloc[i,2]),dfi.iloc[i,0])
+                  subs.append(k)
+                  # print(k)
       subtitles = SubtitlesClip(subs, generator)
 
       video = VideoFileClip("lec.mp4")
       result = CompositeVideoClip([video, subtitles.set_pos(('top'))])
 
-      result.write_videofile("output.mp4")
+      result.write_videofile("TEXT.mp4")
 
 
 def audio_to_text():
@@ -50,29 +53,14 @@ def audio_to_text():
         writer=csv.writer(f)
         writer.writerow(["word","start","end","confidence"])
         for word in words:
-              writer.writerow([word.word,word.start_sec,word.end_sec,word.confidence,word.start_sec+word.end_sec])
+              writer.writerow([word.word,word.start_sec,word.end_sec,word.confidence])
               # sec=sec+(word.end_sec-word.start_sec)
               # print(
               # "{word=\"%s\" start_sec=%.2f end_sec=%.2f confidence=%.2f}"
               # % (word.word, word.start_sec, word.end_sec, word.confidence)) 
 
-
-
-
-
-# print(sec/float(cnt))
-
-# with open("transcript.txt", "r") as file:
-#     data = file.readlines()
-#     for line in data:
-#         word = line.split()
-#         print (word)
-    
-    # for i in word:
-    #     print(i)
-    #     time.sleep(sec/float(cnt))
-
       leopard.delete();
 
+# audio_to_text()    
 
 # show()
